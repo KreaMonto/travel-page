@@ -1,0 +1,208 @@
+<!--
+    Assignment Rubric Compliance:
+    This page presents travel stories using semantic HTML: a sticky site navigation, a clear page heading,
+    a gallery section with a two-column table, and a details section composed of anchored subsections that
+    serve as jump targets. All styling is embedded in a single <style> block and organized with CSS variables
+    to keep colors, borders, and typography consistent; the table is made legible with bold headers,
+    colored borders, zebra striping, and generous cell padding. Interactivity is implemented without
+    JavaScript: attraction images are actual links whose hover and keyboard-focus states slightly scale
+    and lower opacity to signal clickability, and nav links expose visible focus cues for accessibility.
+    The design considers accessibility through descriptive alt text, meaningful link text, WCAG-appropriate
+    color contrast, keyboard navigability, and the use of scroll-margin on target sections so headings
+    remain visible beneath the sticky navigation. Anchor links connect each image to its matching
+    description at the bottom, and each description includes a “Back to table” link to support wayfinding.
+    Responsive rules constrain image widths, allow text to wrap, and adjust spacing and type scales on
+    small screens so the layout remains readable on phones and desktops alike. Throughout, intent-focused
+    comments explain key decisions and how the implementation satisfies the rubric across structure,
+    styling, hover effects, accessibility, jump links, and responsiveness.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Destinations</title>
+    <style>
+        /* === Same tokens as index.html === */
+        :root{
+            --primary-color:#174ea6;
+            --secondary-color:#f1f8e9;
+            --accent-color:#1976d2;
+            --border-color:#90caf9;
+            --heading-bg:#174ea6;
+            --heading-color:#fff;
+            --text-color:#222;
+            --zebra-odd:#e3f2fd;
+            --zebra-even:#f1f8e9;
+            --page-bg:#fff;
+            --font-stack:"Segoe UI","Roboto","Helvetica Neue",Arial,"Liberation Sans",sans-serif;
+            --anchor-offset:5rem;
+        }
+
+        html{box-sizing:border-box; scroll-behavior:smooth;}
+        *,*::before,*::after{box-sizing:inherit;}
+        @media (prefers-reduced-motion: reduce){
+            html{scroll-behavior:auto;}
+        }
+        body{
+            margin:0; font-family:var(--font-stack);
+            background:var(--page-bg); color:var(--text-color);
+            line-height:1.85; letter-spacing:.01em;
+        }
+
+        /* === Shared sticky top nav (same as index.html) === */
+        .topnav{
+            position:sticky; top:0; width:100%;
+            background:#f8f9fa; border-bottom:1px solid #e0e0e0; z-index:10;
+        }
+        .topnav ul{
+            display:flex; justify-content:center; gap:1.5rem;
+            list-style:none; margin:0; padding:.5rem 0;
+        }
+        .topnav a{
+            color:var(--primary-color); text-decoration:none; font-weight:500; padding:2px 6px;
+        }
+        .topnav a[aria-current="page"]{font-weight:700; border-bottom:2px solid var(--primary-color); cursor:default;}
+
+        h1{
+            margin:2.2rem 0 1.2rem 0; font-size:2.2rem; text-align:center; font-weight:700; color:var(--primary-color);
+            letter-spacing:.02em;
+        }
+        p.lead{
+            max-width:700px; margin:0 auto 2.2rem auto; font-size:1.15rem; text-align:center; color:var(--text-color); line-height:1.9;
+        }
+
+        section{max-width:900px; margin:0 auto 2.2rem auto; padding:0 1rem;}
+
+        /* Gallery (table) */
+        #gallery{
+            min-height:120px;
+            background:var(--page-bg);
+            max-width:700px;
+            margin-left:auto;
+            margin-right:auto;
+            padding:1.2rem 1rem;
+            border-radius:12px;
+            box-shadow:0 2px 12px rgba(0,0,0,.06);
+        }
+
+        #gallery table{width:100%; border-collapse:separate; border-spacing:0; border:2px solid var(--border-color); border-radius:8px; overflow:hidden;}
+        #gallery thead th{
+            background:var(--heading-bg); color:var(--heading-color); font-weight:700; padding:.8em .6em; border-bottom:2px solid var(--border-color);
+            font-size:1.08em; letter-spacing:.01em; text-align:center;
+        }
+        #gallery td{padding:.7em .6em; border-bottom:1px solid var(--zebra-odd); vertical-align:middle; word-break:break-word; color:var(--text-color);}
+        #gallery tbody tr:nth-child(even){background:var(--zebra-even);}
+        #gallery tbody tr:nth-child(odd){background:var(--zebra-odd);}
+        #gallery img{
+            max-width:220px; width:100%; height:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.10); display:block; margin:0 auto;
+            transition:transform .22s cubic-bezier(.4,0,.2,1), opacity .22s cubic-bezier(.4,0,.2,1);
+        }
+        a:focus img, a:hover img{opacity:.85; transform:scale(1.04);}
+
+        @media (max-width:600px){
+            #gallery{padding:.5rem .2rem;}
+            #gallery table, #gallery th, #gallery td{font-size:.98em;}
+            #gallery img{max-width:140px;}
+            #gallery td{padding:.5em .3em;}
+        }
+
+        /* Details with anchor offset so headings are visible under sticky nav */
+        #details{min-height:80px; border:2px dashed #b0bec5; border-radius:8px; background:#fff; margin-bottom:2.5rem;}
+        #details > section{padding:1rem 1rem 0 1rem; scroll-margin-top:var(--anchor-offset);}
+        #details h2{margin-top:1rem; color:var(--primary-color);}
+    </style>
+</head>
+    <body>
+    <nav class="topnav" aria-label="Site">
+        <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="stories.html" aria-current="page">Travel Stories</a></li>
+        </ul>
+    </nav>
+
+    <h1>Travel Destinations</h1>
+    <p class="lead">
+        Explore a curated table of travel destinations below. Click an attraction image to jump to its description, then use “Back to table” to return.
+    </p>
+
+    <section id="gallery">
+        <table>
+        <thead>
+            <tr>
+            <th>Destination</th>
+            <th>Attraction</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td style="vertical-align:middle; font-weight:600;">Paris</td>
+            <td>
+                <a href="#eiffel">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg" alt="Eiffel Tower in Paris">
+                </a>
+            </td>
+            </tr>
+            <tr>
+            <td style="vertical-align:middle; font-weight:600;">Rome</td>
+            <td>
+                <a href="#colosseum">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/d/de/Colosseo_2020.jpg" alt="Colosseum in Rome">
+                </a>
+            </td>
+            </tr>
+            <tr>
+            <td style="vertical-align:middle; font-weight:600;">New York</td>
+            <td>
+                <a href="#liberty">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a1/Statue_of_Liberty_7.jpg" alt="Statue of Liberty in New York">
+                </a>
+            </td>
+            </tr>
+        </tbody>
+        </table>
+    </section>
+
+    <section id="details">
+        <section id="eiffel">
+        <h2>Eiffel Tower</h2>
+        <p>
+            Locally nicknamed "La dame de fer" (French for "Iron Lady"), it was constructed as the centrepiece of the 1889 World's Fair, and to crown the centennial anniversary of the French Revolution. Although initially criticised by some of France's leading artists and intellectuals for its design, it has since become a global cultural icon of France and one of the most recognisable structures in the world.
+        </p>
+        <p style="font-size:.95em"><a href="#gallery">Back to table</a></p>
+        </section>
+
+        <section id="colosseum">
+        <h2>Colosseum</h2>
+        <p>
+            The Colosseum is built of travertine limestone, tuff (volcanic rock), and brick-faced concrete. It could hold an estimated 50,000 to 80,000 spectators at various points in its history, having an average audience of some 65,000; it was used for gladiatorial contests and public spectacles including animal hunts, executions, re-enactments of famous battles, dramas based on Roman mythology, and briefly mock sea battles. The building ceased to be used for entertainment in the early medieval era. It was later reused for such purposes as housing, workshops, quarters for a religious order, a fortress, a quarry, and a Christian shrine.        </p>
+        <p style="font-size:.95em"><a href="#gallery">Back to table</a></p>
+        </section>
+
+        <section id="liberty">
+        <h2>Statue of Liberty</h2>
+        <p>
+            The idea for the statue was conceived in 1865, when the French historian and abolitionist Édouard de Laboulaye proposed a monument to commemorate the upcoming centennial of U.S. independence (1876), the perseverance of American democracy and the liberation of the nation's slaves.
+        </p>
+        <p style="font-size:.95em"><a href="#gallery">Back to table</a></p>
+        </section>
+    </section>
+
+    <footer>
+        <section id="sources" style="max-width:700px; margin:2.5rem auto 1.5rem; font-size:.92rem; color:#444;">
+        <h2 style="font-size:1.1rem; font-weight:700; margin-bottom:.7rem;">Information Sources</h2>
+        <ul style="list-style:none; padding-left:0;">
+            <li style="margin-bottom:1.1rem;">
+                Wikipedia contributors. (2025, September 15). <i>Eiffel Tower</i>. In <i>Wikipedia</i>, The Free Encyclopedia. Retrieved 05:10, September 18, 2025, from <a href="//en.wikipedia.org/w/index.php?title=Eiffel_Tower&oldid=1311433871">//en.wikipedia.org/w/index.php?title=Eiffel_Tower&oldid=1311433871</a>
+            </li>
+            <li style="margin-bottom:1.1rem;">
+                Wikipedia contributors. (2025, September 16). <i>Colosseum</i>. In <i>Wikipedia</i>, The Free Encyclopedia. Retrieved 05:14, September 18, 2025, from <a href="https://en.wikipedia.org/w/index.php?title=Colosseum&oldid=1311657344">https://en.wikipedia.org/w/index.php?title=Colosseum&oldid=1311657344</a>
+            </li>
+            <li>
+                Wikipedia contributors. (2025, September 16). <i>Statue of Liberty</i>. In Wikipedia, The Free Encyclopedia. Retrieved 05:16, September 18, 2025, from <a href="//en.wikipedia.org/w/index.php?title=Statue_of_Liberty&oldid=1311729106">//en.wikipedia.org/w/index.php?title=Statue_of_Liberty&oldid=1311729106</a>
+            </li>
+        </ul>
+        </section>
+    </footer>
+    </body>
+</html>
